@@ -1,0 +1,29 @@
+python3-pyblast (0.1-4) unstable; urgency=medium
+
+  * Fixed bug with best_hits_gene
+
+ -- Redmar van den Berg <R.R.vandenberg@nvwa.nl>  Mon, 30 Oct 2017 08:22:42 +0100
+
+python3-pyblast (0.1-3) unstable; urgency=medium
+
+  * remove ubuntu from version numbering
+
+ -- Redmar van den Berg <R.R.vandenberg@nvwa.nl>  Wed, 11 Oct 2017 10:31:22 +0200
+
+python3-pyblast (0.1-1ubuntu2) unstable; urgency=medium
+
+  * Also depends on python3 of course
+
+ -- Redmar van den Berg <R.R.vandenberg@nvwa.nl>  Wed, 11 Oct 2017 10:20:18 +0200
+
+python3-pyblast (0.1-1ubuntu1) unstable; urgency=medium
+
+  * Added biopython dependency
+
+ -- Redmar van den Berg <R.R.vandenberg@nvwa.nl>  Wed, 11 Oct 2017 10:18:31 +0200
+
+python3-pyblast (0.1-1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Redmar van den Berg <Redmar@ubuntu.com>  Mon, 09 Oct 2017 14:54:11 +0200
