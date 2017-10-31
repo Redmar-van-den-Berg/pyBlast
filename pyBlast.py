@@ -280,86 +280,6 @@ class pyBlastFlat(pyBlast):
         for record in best.values():
             yield record
 
-class pyBlastMerged(pyBlastFlat):
-    """ Yields merged, flattened Blast Records
-
-    Each merged Record is guaranteed to have:
-    - One Alignment per Record
-    - One Hsp per Alignment
-
-    However, we will attempt to merge subsequent records, iff:
-    - Their Record.query and Alignment.hit_def match
-    - Their Record.alignment.hsp.frame's match 
-    - The merged Record has fewer mismatches than the separate Records added
-    - 
-    """
-    def __init__(self, cmd, rm_tmp):
-        # We cannot merge hits if we do not know the mismatch
-        super().__init__(cmd, rm_tmp, add_mismatch=True)
-
-    def __enter__(self):
-        return (record for record in self.merge_records(super().__enter__()))
-
-    def merge_records(self,pb):
-        # StopIteration here will be passed to the caller
-        current_record = next(pb)
-        
-        # Loop invariant:
-        # At the beginning of the loop we only have current_record
-        # current_record is the next record that will be yielded
-        while True:
-            try:
-                next_record = next(pb)
-            except StopIteration:
-                print("Only one record")
-                yield current_record
-                break
-             
-            if self.mergable(current_record, next_record):
-                current_record=merge(current_record, next_record)
-            else:
-                yield current_record
-                current_record = next_record
-
-    def mergable(self, record1, record2):
-        """ Return wether two records can be merged """
-        # Make sure we only get flat Records
-        if hasattr(record1,'alignments') or hasattr(record2,'alignments'):
-            raise RuntimeError('only flat Records are supported')
-
-        # We don't want te merge different queries
-        if record1.query != record2.query:
-            return False
-        # Or hits to different sequences
-        elif record1.alignment.hit_def != record2.alignment.hit_def: 
-            return False
-        # Or hits that are in a different frame
-        elif record1.alignment.hsp.frame != record2.alignment.hsp.frame:
-            return False
-        # Or when the merging increases the number of mismatches
-        else:
-            merged_record = self.merge(record1, record2)
-
-    def merge(self, record1, record2):
-        """ Merge record2 into record 1
-
-        Note, this function does not verify wether the merge is possible or 
-        apropriate
-        """
-        print(record1.alignment.hsp)
-        print(record2.alignment.hsp)
-        merged_record = copy.deepcopy(record1)
-        merged_record.alignment.hsp.expect = record1.alignment.hsp.expect * record2.alignment.hsp.expect
-        merged_record.alignment.hsp.bits = record1.alignment.hsp.bits + record2.alignment.hsp.bits
-        merged_record.alignment.hsp.score = record1.alignment.hsp.score + record2.alignment.hsp.score
-        print(merged_record.alignment.hsp)
-        print(dir(merged_record.alignment.hsp))
-        exit()
-            
-def _same_frame(hsp1,hsp2):
-    """ Determine wether two hsps are in the same frame """
-    return hsp1.frame == hsp2.frame
-
 def _minmax(*args):
     """ Return the min and max of the input arguments """
     min_=min(*args)
@@ -383,26 +303,6 @@ def _hit_overlap(hsp1,hsp2):
     hit2_range=_srange(hit2_begin,hit2_end)
 
     return not hit1_range.isdisjoint(hit2_range)
-
-def _query_overlap(hsp1,hsp2):
-    """ Determine whether the queries for to hsps overlap """
-    # We have to determine min/max since the frame can be different
-    hsp1_begin,hsp1_end=_minmax(hsp1.query_start,hsp1.query_end)
-    hsp2_begin,hsp2_end=_minmax(hsp2.query_start,hsp2.query_end)
-
-    hsp1_range=_srange(hsp1_begin,hsp1_end)
-    hsp2_range=_srange(hsp2_begin,hsp2_end)
-
-    return not hsp1_range.isdisjoint(hsp2_range)
-    #hsp1_end=max(hsp1.query_start,hsp1.query_end)
-    #return hsp1.
-
-
-def _merge_hsps(record):
-    print(record.query)
-    for hsp1,hsp2 in itertools.combinations(record.alignments[0].hsps,2):
-        if not (_hit_overlap(hsp1,hsp2) and _query_overlap(hsp1,hsp2)):
-            print("Try to merge the hsps")
 
 if __name__ == '__main__':
     #unittest.main()
