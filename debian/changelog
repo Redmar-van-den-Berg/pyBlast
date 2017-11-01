@@ -1,3 +1,9 @@
+python3-pyblast (0.2) unstable; urgency=medium
+
+  * Added fasta function to pyBlastFlat
+
+ -- Redmar van den Berg <R.R.vandenberg@nvwa.nl>  Wed, 01 Nov 2017 07:36:50 +0100
+
 python3-pyblast (0.1-4) unstable; urgency=medium
 
   * Fixed bug with best_hits_gene

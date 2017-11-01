@@ -17,6 +17,9 @@ import Bio
 from Bio.Blast import NCBIXML
 from Bio.Blast.Applications import NcbiblastnCommandline
 
+from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
+
 
 class pyBlast():
     """ A full python wrapper around makeblastdb and ncbi-blast+
@@ -280,6 +283,15 @@ class pyBlastFlat(pyBlast):
         for record in best.values():
             yield record
 
+    @staticmethod
+    def fasta(record):
+        """ Return the Blast object as SeqRecord """
+        return SeqRecord(
+            Seq(record.alignment.hsp.sbjct),
+            id=record.query
+        )
+
+
 def _minmax(*args):
     """ Return the min and max of the input arguments """
     min_=min(*args)
@@ -305,39 +317,17 @@ def _hit_overlap(hsp1,hsp2):
     return not hit1_range.isdisjoint(hit2_range)
 
 if __name__ == '__main__':
-    #unittest.main()
-    #exit()
     from Bio.Blast.Applications import NcbiblastnCommandline
     cmd=NcbiblastnCommandline(
         query='test/sul2_1_AF542061.fasta',
         db='test/102637-001-018_k64-contigs.fa',
         evalue=0.001
     )
-    cmd=NcbiblastnCommandline(
-        query='test/bst2_query.fasta',
-        db='test/bst2_target.fasta',
-        evalue=0.1,
-        gapopen=50,
-        gapextend=5
-    )
-    #with pyBlastFlat(cmd,rm_tmp=False) as pb:
     with pyBlastFlat(cmd,rm_tmp=False,min_cov=0.5) as pb:
         for record in pb:
-            continue
-            #pprint(vars(record))
-            #pprint(vars(record.alignments[0].hsps[0]))
             print(record)
-            print(dir(record))
             print('='*80)
             print(record.alignment)
-            print(dir(record.alignment))
             print('='*80)
             print(record.alignment.hsp)
-            print(dir(record.alignment.hsp))
-            exit()
-            #print(record)
-            print(record.query,':',record.mismatch)
-            print(record.alignment)
-            print(record.alignment.hsp)
-            #print(dir(record.alignment.hsp))
-            #print(dir(record))
+            print(pyBlastFlat.fasta(record))
