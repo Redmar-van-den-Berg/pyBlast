@@ -288,7 +288,8 @@ class pyBlastFlat(pyBlast):
         """ Return the Blast object as SeqRecord """
         return SeqRecord(
             Seq(record.alignment.hsp.sbjct),
-            id=record.query
+            id=record.query,
+            description='Hit found in "{}"'.format(record.alignment.hit_def)
         )
 
 
