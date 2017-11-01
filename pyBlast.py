@@ -280,8 +280,7 @@ class pyBlastFlat(pyBlast):
                 best[gene_name]=record
             elif record.mismatch < best[gene_name].mismatch:
                 best[record.query]=record
-        for record in best.values():
-            yield record
+        return best.values()
 
     @staticmethod
     def fasta(record):
