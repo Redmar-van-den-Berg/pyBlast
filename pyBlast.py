@@ -288,7 +288,11 @@ class pyBlastFlat(pyBlast):
         return SeqRecord(
             Seq(record.alignment.hsp.sbjct),
             id=record.query,
-            description='Hit found in "{}"'.format(record.alignment.hit_def)
+            description='{}:{}-{}'.format(
+                record.alignment.hit_def,
+                record.alignment.hsp.sbjct_start,
+                record.alignment.hsp.sbjct_end
+            )
         )
 
 
@@ -318,6 +322,7 @@ def _hit_overlap(hsp1,hsp2):
 
 if __name__ == '__main__':
     from Bio.Blast.Applications import NcbiblastnCommandline
+    from Bio import SeqIO
     cmd=NcbiblastnCommandline(
         query='test/sul2_1_AF542061.fasta',
         db='test/102637-001-018_k64-contigs.fa',
@@ -325,9 +330,6 @@ if __name__ == '__main__':
     )
     with pyBlastFlat(cmd,rm_tmp=False,min_cov=0.5) as pb:
         for record in pb:
-            print(record)
-            print('='*80)
-            print(record.alignment)
-            print('='*80)
-            print(record.alignment.hsp)
-            print(pyBlastFlat.fasta(record))
+            fasta=pyBlastFlat.fasta(record)
+            print(fasta)
+            print(SeqIO.write(fasta,sys.stdout, 'fasta'))
