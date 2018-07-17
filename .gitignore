@@ -1,0 +1,6 @@
+__pycache__/
+debian/debhelper-build-stamp
+debian/files
+debian/python3-pyblast.debhelper.log
+debian/python3-pyblast.substvars
+debian/python3-pyblast/

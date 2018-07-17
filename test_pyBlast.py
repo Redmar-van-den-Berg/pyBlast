@@ -9,6 +9,7 @@ import pyBlast
 
 class test_pyblast(unittest.TestCase):
     def test_unsupported_ncbi_command(self):
+        self.verbose = False
         from Bio.Blast.Applications import NcbiblastnCommandline
         from Bio.Application import ApplicationError
         cmd=NcbiblastnCommandline(
@@ -38,26 +39,6 @@ class testPyBlast(unittest.TestCase):
     def test_true(self):
         self.assertTrue(True)
     
-    #def test_merge_two_hsp(self):
-        #record=self.sul2_1
-        #two_hsp=record.alignments[0].hsps
-        #merged=pyBlast._merge_hsps(record)
-
-    def test_same_frame_true(self):
-        self.assertTrue(pyBlast._same_frame(*self.sul2_1.alignments[0].hsps))
-
-    #def test_same_frame_false(self):
-    #    pass
-
-    #def test_query_overlap_true(self):
-    #    pass
-
-    #def test_query_overlap_edge_true(self):
-        """Test edge cases for overlap true"""
-
-    #def test_query_overlap_edge_false(self):
-        """Test edge cases for overlap false"""
-
     def test_min_max_two(self):
         self.assertEqual(pyBlast._minmax(3,2),(2,3))
 
@@ -67,9 +48,6 @@ class testPyBlast(unittest.TestCase):
 
     def test_min_max_ten(self):
         self.assertEqual(pyBlast._minmax(0,1,2,3,4,9),(0,9))
-
-    def test_query_overlap_false(self):
-        self.assertFalse(pyBlast._query_overlap(*self.sul2_1.alignments[0].hsps))
 
     def test_hit_overlap(self):
         self.assertFalse(pyBlast._hit_overlap(*self.sul2_1.alignments[0].hsps))
@@ -89,6 +67,7 @@ class test_file_operations(unittest.TestCase):
         self.temp_dir = tempfile.mkdtemp()
         self.target = shutil.copy('test/target.fasta',self.temp_dir)
         self.query = shutil.copy('test/query.fasta',self.temp_dir)
+        self.verbose = False
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
@@ -103,7 +82,7 @@ class test_file_operations(unittest.TestCase):
     def test_makeblastdb(self):
         blastdb = os.path.join(self.temp_dir,'testdb')
         pyBlast.pyBlast.makeblastdb(
-            'self',
+            self,
             target=self.target,
             dbtype='nucl',
             blastdb=blastdb
