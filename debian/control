@@ -4,9 +4,7 @@ Maintainer: Redmar van den Berg <Redmar@ubuntu.com>
 Build-Depends: debhelper (>=9)
 Standards-Version: 3.9.6
 Section: libs
-Homepage: 
-#Vcs-Git: git://anonscm.debian.org/collab-maint/python3-pyblast.git
-#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/python3-pyblast.git
+Homepage: https://github.com/Redmar-van-den-Berg/pyBlast
 
 Package: python3-pyblast
 Architecture: any
