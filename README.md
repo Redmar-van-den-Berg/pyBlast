@@ -2,6 +2,9 @@
 
 pyBlast simplifies working with BLAST from Python by enabling you to directly BLAST two fasta files against each other, without having to format the BLAST database or run BLAST from the command line.
 
+pyBlast has been tested on Ubuntu 16.04 and Python 3.5.2
+
+
 This is a minimal program to BLAST `query.fasta` against `database.fasta` using pyBlast
 ```
 #!/usr/bin/env python3
