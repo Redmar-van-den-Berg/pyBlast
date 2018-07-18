@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 
+# Author: Redmar van den Berg
+# Copyright: 2017-2018 NVWA
+#
+# NVWA: Nederlandse Voedsel- en Warenautoriteit
+# Netherlands Food and Consumer Product Safety Authority
+# https://english.nvwa.nl/
+#
+# Licence: GPLv3
+
 import os
 import sys
 import subprocess
