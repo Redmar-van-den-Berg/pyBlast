@@ -306,6 +306,9 @@ class pyBlastFlat(pyBlast):
     @staticmethod
     def fasta(record):
         """ Return the Blast object as SeqRecord """
+        # This function only works with flat blast Records
+        if hasattr(record, 'alignments'):
+            raise RuntimeError('only flat Records are supported')
         return SeqRecord(
             Seq(record.alignment.hsp.sbjct),
             id = record.query,
