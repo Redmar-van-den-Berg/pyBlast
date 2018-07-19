@@ -153,13 +153,14 @@ class pyBlastFlat(pyBlast):
                     query_length = flat_record.query_length
                     if align_length/query_length < self.min_cov:
                         continue
+
                     # Skip record that have an identity less then min_id
                     identities = flat_record.alignment.hsp.identities
                     query_length = flat_record.query_length
-                    elif identities/query_length < self.min_id:
+                    if identities/query_length < self.min_id:
                         continue
-                    else:
-                        yield flat_record
+
+                    yield flat_record
 
     def mismatch(self, record):
         """ Return the number of mismatches in a blast hit """
@@ -238,7 +239,7 @@ class pyBlastFlat(pyBlast):
             """ Remove all hits that overlap hit1 but have more mismatches """
             # Be sure to iterate over a copy of lijst
             for record in lijst[:]:
-                is_better = record1.mismatch < record.mismatch:
+                is_better = record1.mismatch < record.mismatch
                 if overlap(record1, record) and is_better:
                     lijst.remove(record)
 
